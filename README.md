@@ -48,5 +48,6 @@
 
     when done run command npm run dev, this will run the program using nodemon to keep track of server changes. 
     ``` 
-   
+
+`P.S. all new changes have to be sent via a new branch, do not push code the the main branch.
 
