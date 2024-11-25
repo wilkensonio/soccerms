@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+
+*/node_modules
+*/node_modules
+
+.vscode
+.idea
+*.iml
+.DS_Store

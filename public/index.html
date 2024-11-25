@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>SoccerNetZone</h1>
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" id="search" class="form-control" placeholder="Search for players...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" id="search-button"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <ul id="player-list" class="list-group mt-3"></ul>
+    </div>
+
+    <main class="container-fluid row mt-3">
+        <nav class="col-3">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="/pages/clubs.html">Clubs</a></li>
+                <li class="list-group-item"><a href="/pages/matches.html">Matches</a></li>
+                <li class="list-group-item"><a href="/pages/competition.html">Competitions</a></li>
+                <li class="list-group-item"><a href="/pages/favorites.html">Favorites</a></li>
+                <li class="list-group-item"><a href="/pages/logout.html" id="logout-nav"><i
+                            class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="col-9">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h2>Player Information</h2>
+                    <div class="d-flex">
+                        <button class="btn btn-primary btn-sm me-2" id="add-favorite-button" hidden>➕</button>
+                        <button id="transfer-player-btn" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#transferModal">
+                            Transfer player<span> ➖ </span></button>
+
+                        <button class="btn btn-primary btn-sm me-2 ms-2" data-bs-toggle="modal"
+                            data-bs-target="#add-player-modal">
+                            Add Player <span class="text-danger">➕</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class=" d-flex justify-content-center align-items-center">
+                            <div style="color: blue;">Soccer</div>
+                            <div class="col-3" style="width: 100px;">
+                                <img src="/assets/soccerms.png" class="img-fluid" alt="Player Image">
+                            </div>
+                            <div style="color: blue;">MS</div>
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="text-end">Age</th>
+                                    <th class="d-none d-xl-table-cell text-end">Nation</th>
+                                    <th class="d-none d-xl-table-cell text-end">Position</th>
+                                    <th class="d-none d-xl-table-cell text-end">Goals</th>
+                                    <th class="d-none d-xl-table-cell text-end">Assists</th>
+                                    <th class="d-none d-xl-table-cell text-end">Minutes</th>
+                                    <th class="d-none d-xl-table-cell text-end">Injuries</th>
+                                    <th class="d-none d-xl-table-cell text-end">Fans</th>
+                                    <th class="d-none d-xl-table-cell text-end">Delete</th>
+                                    <th class="d-none d-xl-table-cell text-end">Update</th>
+                                </tr>
+                            </thead>
+                            <tbody id="player-table-body">
+                                <tr>
+                                    <td colspan="9" class="text-center">No players found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="mt-5">Transfer History</h2>
+            <div class="card mt-4">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-2">Player name</th>
+                                <th class="text-end">From Club</th>
+                                <th class="d-none d-xl-table-cell text-end">To Club</th>
+                                <th class="col-2">Transfer Date</th>
+                                <th class="d-none d-xl-table-cell text-end">Transfer Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table">
+                            <tr>
+                                <td colspan="4" class="text-center">No transfers found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Update player modal -->
+        <div id="update-player-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Player</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="update-player-form">
+                            <input type="hidden" id="update-player-id">
+                            <div class="row">
+
+                                <div class="mb-3 col-6 col-6">
+                                    <label for="update-player-name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="update-player-name" required>
+                                </div>
+                                <div class="mb-3 col-6 col-6">
+                                    <label for="update-player-age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" id="update-player-age" required>
+                                </div>
+
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-nationality" class="form-label">Nationality</label>
+                                    <input type="text" class="form-control" id="update-player-nationality" required>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-position" class="form-label">Position</label required>
+                                    <input type="text" class="form-control" id="update-player-position">
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-goals" class="form-label">Goals</label>
+                                    <input type="text" class="form-control" id="update-player-goals">
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-assists" class="form-label">Assists</label>
+                                    <input type="text" class="form-control" id="update-player-assists">
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-minutes-palyed" class="form-label">Minutes Played</label>
+                                    <input type="text" class="form-control" id="update-player-minutes-palyed">
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="update-player-injury" class="form-label">Injury</label>
+                                    <input type="text" class="form-control" id="update-player-injury">
+                                </div>
+                                <div class="mb-3" hidden>
+                                    <label for="update-player-club_id" class="form-label">Club</label>
+                                    <input type="text" class="form-control" id="update-player-club_id">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="save-player-updates" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- add player modal -->
+        <div id="add-player-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center fw-bold">Sign a player</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-player-form">
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <label for="add-player-name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="add-player-name" required>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="add-player-age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" id="add-player-age" required>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="add-player-nationality" class="form-label">Nationality</label>
+                                    <input type="text" class="form-control" id="add-player-nationality" required>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="add-player-position" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="add-player-position" required>
+                                </div>
+
+                                <div class="mb-3 col-12">
+                                    <label for="add-player-club" class="form-label">Choose a club</label>
+                                    <select name="club" id="add-player-club_id">
+                                        <!-- load all the clubs for sigining player-->
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-6" hidden>
+                                    <label for="add-player-goals" class="form-label">Goals</label>
+                                    <input type="number" class="form-control" id="add-player-goals" required>
+                                </div>
+                                <div class="mb-3 col-6" hidden>
+                                    <label for="add-player-assists" class="form-label">Assists</label>
+                                    <input type="number" class="form-control" id="add-player-assists" required>
+                                </div>
+                                <div class="mb-3 col-6" hidden>
+                                    <label for="add-player-minutes-played" class="form-label">Minutes Played</label>
+                                    <input type="number" class="form-control" id="add-player-minutes-played" required>
+                                </div>
+                                <div class="mb-3 col-6" hidden>
+                                    <label for="add-player-injury" class="form-label">Injury</label>
+                                    <input type="text" class="form-control" id="add-player-injury">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="save-player" class="btn btn-primary">Add Player</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tranfer modal -->
+        <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="transferModalLabel">Transfer Player</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="transferForm">
+
+                            <!-- Player Selection -->
+                            <div class="mb-3">
+                                <label for="playerSelect" class="form-label">Select Player</label>
+                                <select id="playerSelect" class="form-select" required>
+                                    <!-- Players will be populated here -->
+                                </select>
+                            </div>
+
+                            <!-- From Club Selection -->
+                            <div class="mb-3">
+                                <label for="fromClubSelect" class="form-label">From Club</label>
+                                <input type="text" id="fromClub" placeholder="From club" readonly class="form-control">
+                                <input id="fromClubId" hidden>
+
+                            </div>
+
+                            <!-- To Club Selection -->
+                            <div class="mb-3">
+                                <label for="toClubSelect" class="form-label">To Club</label>
+                                <select id="toClubSelect" class="form-select" required>
+                                    <!-- Clubs will be populated here -->
+                                </select>
+                            </div>
+
+                            <!-- Transfer Fee -->
+                            <div class="mb-3">
+                                <label for="transferFee" class="form-label">Transfer Fee</label>
+                                <input type="number" id="transferFee" class="form-control" required>
+                            </div>
+
+                            <!-- Transfer Date -->
+                            <div class="mb-3">
+                                <label for="transferDate" class="form-label">Transfer Date</label>
+                                <input type="date" id="transferDate" class="form-control" required>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Submit Transfer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <footer class="footer bg-light text-muted p-3 text-center">
+        © 2024
+    </footer>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/script.js"> </script>
+</body>
+
+</html>
