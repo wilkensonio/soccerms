@@ -419,6 +419,9 @@ document.getElementById('transferForm').addEventListener('submit', async functio
     await transferPlayer(transferData);
 });
 
+// fans 
+
+
 
 // Initial fetch
 $(document).ready(function() {
