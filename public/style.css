@@ -1,0 +1,136 @@
+/* Styles For the Match.html */
+body {
+    font-family:"Jost", serif;
+    color: blue;
+    background: #111;
+    margin: 0;
+    font-size: 1.2rem;
+
+}
+
+/* testinf purposes */
+.main-background {
+    background: radial-gradient(transparent 70%, #111a), 
+    linear-gradient(transparent 30%, #111a 45%, #111 75%),
+    linear-gradient(90deg, transparent 30%, #111a 45%, #111 75%);
+    background-size: 100px 100px, 100px 100px, 100px 100px;
+    background-color: rebeccapurple;
+    display: grid;
+}
+
+/* Side Bar nav effects */
+.sidebar .nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: rebeccapurple;
+    transition: width 0.3s ease;
+}
+
+.sidebar .nav-link:hover::after {
+    width: 100%;
+}
+
+.sidebar .nav-link:hover {
+    color: color-mix(in srgb, var(--color), white 20%);;
+    transform: translateX(5px);
+}
+
+/* hover effect */ 
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Table row hover effect */
+.table-hover tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(240, 219, 79, 0.1);
+    transform: scale(1.01);
+}
+
+/* Search effects */
+#search-match, #search-button-match {
+    transition: all 0.3s ease;
+}
+#search-match:focus {
+    box-shadow: 0 0 0 0.2rem rgba(240, 219, 79, 0.25);
+}
+
+#search-button-match:hover {
+    background-color: rebeccapurple;
+    color: #111;
+}
+
+/* Main Heading */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Footer */
+.footer {
+    transition: all 0.3s ease;
+}
+.footer:hover {
+    background-color: rgba(240, 219, 79, 0.1);
+    color: color-mix(in srgb, rebeccapurple , white 20%);
+}
+
+.title {
+    position: relative;
+    z-index: 1;
+    color: blue;
+    font-size:50px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 102, 255, 0.7);
+    transition: text-shadow 0.3s ease;
+}
+
+#search-match{
+    color: blue;
+
+}
+
+/* Logo png ball  */
+.sitelogo {
+    transition: transform 0.3s ease;
+}
+
+.sitelogo:hover {
+    transform: scale(1.05);
+}
+
+.sitelogo img {
+    transition: filter 0.3s ease;
+}
+
+.sitelogo:hover img {
+    filter: brightness(1.2) drop-shadow(0 0 10px rgba(240, 219, 79, 0.7));
+}
+
+h2{
+
+    color: blue;
+    text-shadow: 0 0 10px rgba(17, 0, 255, 0.7);
+}
