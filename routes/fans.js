@@ -29,6 +29,17 @@ router.get('/fanclubplayer', (req, res) => {
         if (err) throw err;
         res.json(results);
     });
+});    
+
+router.get('/numberOfFans/:player_id', (req, res) => {
+
+    const player_id = req.params.player_id;
+    const sql = `SELECT COUNT(*) AS numberOfFans FROM fan WHERE player_id = ?`;
+    db.query(sql, player_id, (err, results) => {
+        if (err) throw err;
+        res.json(results[0]);
+    });
 });
+ 
 
 module.exports = router;    
