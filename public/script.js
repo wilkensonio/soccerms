@@ -36,11 +36,24 @@ const delPlayer = (id) => {
 };  
  
 
-function fetchPlayers(searchTerm = '') {
-    $.get(`/api/players?name=${searchTerm}`, function(data) {
+ // Fetch number of fans for a player
+function fetchNumberOfFans(playerId) {
+    return new Promise((resolve, reject) => {
+        $.get(`/api/fans/numberOfFans/${playerId}`, function (data) {
+            resolve(data.numberOfFans);
+        }).fail((error) => {
+            console.error('Error fetching number of fans:', error);
+            resolve(0); // Default to 0 if there's an error
+        });
+    });
+}
+
+async function fetchPlayers(searchTerm = '') {
+    try {
+        const response = await $.get(`/api/players?name=${searchTerm}`);
         const playerTableBody = $('#player-table-body');
-        playerTableBody.empty(); 
-        
+        playerTableBody.empty();
+
         // Populate player select dropdown for transfer
         const selectPlayer = $('#playerSelect');
         selectPlayer.empty();
@@ -48,13 +61,16 @@ function fetchPlayers(searchTerm = '') {
         selectPlayer.append(`
             <option value="" disabled selected>Select a player</option>
         `);
-         
-        if (data.length > 0) {
-            data.forEach(player => {
+
+        if (response.length > 0) {
+            for (const player of response) {
+                // Fetch the number of fans for the current player
+                const numberOfFans = await fetchNumberOfFans(player.player_id);
+
                 // Populate player select dropdown for transfer
                 selectPlayer.append(`
                     <option value="${player.player_id}">${player.name}</option>
-                `); 
+                `);
 
                 playerTableBody.append(`
                     <tr>
@@ -66,17 +82,20 @@ function fetchPlayers(searchTerm = '') {
                         <td class="d-none d-xl-table-cell text-end">${player.assists || 0}</td>
                         <td class="d-none d-xl-table-cell text-end">${player.minutes_played || 0}</td>
                         <td class="d-none d-xl-table-cell text-end">${player.injuries || 'No injury'}</td>
-                        <td class="d-none d-xl-table-cell text-end">${player.fans || 0}</td>
+                        <td class="d-none d-xl-table-cell text-end">${numberOfFans}</td>
                         <td class="d-none d-xl-table-cell text-end"><button class='player-del btn btn-danger' data-id="${player.player_id}">Delete</button></td>
                         <td class="d-none d-xl-table-cell text-end"><button class='player-update btn btn-primary' data-id="${player.player_id}">Update</button></td>
                     </tr>
-                `); 
-            });
+                `);
+            }
         } else {
             playerTableBody.append('<tr><td colspan="9" class="text-center">No players found.</td></tr>');
         }
-    });
+    } catch (error) {
+        console.error('Error fetching players:', error);
+    }
 }
+
 
 const getPlayerById = async (id) => {
     try {
