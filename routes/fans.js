@@ -40,6 +40,17 @@ router.get('/numberOfFans/:player_id', (req, res) => {
         res.json(results[0]);
     });
 });
+
+// ('Carlos Hernandez', 35, 'Mexico', 'Inactive', 3, 6),
+
+router.post('/addFan', (req, res) => { 
+    const { name, age, nationality, membership_status, player_id, club_id } = req.body;
+    const sql = 'INSERT INTO fan (name, age, nationality, membership_status, player_id, club_id) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [name, age, nationality, membership_status, player_id, club_id], (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
  
 
 module.exports = router;    
