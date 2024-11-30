@@ -140,36 +140,35 @@
         //  Fetching matches 
 
         function fetchMatches(searchTerm = '') {
-            fetch(`/api/matches?location=${searchTerm}`)
-                .then(response => response.json())
-                .then(data => {
-                    const matchesTableBody = document.getElementById('matches-table-body');
-                    matchesTableBody.innerHTML = '';
-                    if (data.length > 0) {
-                        data.forEach(match => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
+    fetch(`/api/matches/details?location=${searchTerm}`)
+        .then(response => response.json())
+        .then(data => {
+            const matchesTableBody = document.getElementById('matches-table-body');
+            matchesTableBody.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(match => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
                         <td>${new Date(match.date).toLocaleDateString()}</td>
                         <td class="text-end">${match.game_time}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.location}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.home_team}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.away_team}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.score}</td>
-                        <td class="d-none d-xl-table-cell text-end">${match.competition_id}</td>
+                        <td class="d-none d-xl-table-cell text-end">${match.competition_name}</td>
                     `;
-                            matchesTableBody.appendChild(row);
-                        });
-                    } else {
-                        const noMatchRow = document.createElement('tr');
-                        noMatchRow.innerHTML = `<td colspan="7" class="text-center">No matches found.</td>`;
-                        matchesTableBody.appendChild(noMatchRow);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching matches:', error);
+                    matchesTableBody.appendChild(row);
                 });
-        }
-
+            } else {
+                const noMatchRow = document.createElement('tr');
+                noMatchRow.innerHTML = `<td colspan="7" class="text-center">No matches found.</td>`;
+                matchesTableBody.appendChild(noMatchRow);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching matches:', error);
+        });
+}
     </script>
 </body>
 
