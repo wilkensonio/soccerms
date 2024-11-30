@@ -332,6 +332,11 @@
 
             }
 
+            if (!fanData.player_id || !fanData.club_id) {
+                alert('Please select a player and a club');
+                return;
+            }
+
             const response = await fetch('/api/fans/addFan', {
                 method: 'POST',
                 headers: {
