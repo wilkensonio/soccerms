@@ -290,10 +290,14 @@ function fetchClubs() {
             const clubSelect = document.getElementById('add-player-club_id');
             // transfer player select dropdown 
             const toClubSelect = document.getElementById('toClubSelect');
+            // fan club select dropdown
+           
 
             clubSelect.innerHTML = '';
             // transfer player select dropdown 
             toClubSelect.innerHTML = '';
+
+             
 
             data.forEach(club => {
                 // transfer club select dropdown
@@ -309,10 +313,18 @@ function fetchClubs() {
                 option.value = club.club_id;
                 option.textContent = club.name;
                 clubSelect.appendChild(option);
+                
             });
         })
         .catch(err => console.error(err));
 }
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(value); 
+};
 
 // transfer player and history  
 function fetchTransferHistory() {
@@ -330,8 +342,8 @@ function fetchTransferHistory() {
                         <td>${transfer.player_name}</td>
                         <td class="text-end">${transfer.from_club}</td>
                         <td class="d-none d-xl-table-cell text-end">${transfer.to_club}</td>
-                        <td class="col-2">${transfer.transfer_date}</td>
-                        <td class="d-none d-xl-table-cell text-end">${transfer.transfer_fee}</td>
+                        <td class="col-2">${new Date(transfer.transfer_date).toLocaleDateString()}</td>
+                        <td class="d-none d-xl-table-cell text-end">${formatCurrency(transfer.transfer_fee)}</td>
                     `;
                     transferTableBody.appendChild(row);
                 });

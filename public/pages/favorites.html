@@ -10,6 +10,17 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+
+    <!-- <script src="../script.js"></script> -->
+
     <link rel="stylesheet" href="../style.css">
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +34,8 @@
     <main class="container-fluid row mt-3" style="min-height: 100vh;">
         <nav class="col-md-3 col-lg-2 d-md-block sidebar">
             <ul class="list-group nav">
-                <li class="nav-item"><a class="nav-link" href="../index.html">Players</a></li>
+                <li class="nav-item"><a class="nav-link" href="../index.html">
+                        <i class="bi bi-people me-2"></i>Players</a></li>
                 <li class="nav-item"><a class="nav-link" href="/pages/clubs.html">
                         <i class="bi bi-building me-2"></i>Clubs</a></li>
                 </a></li>
@@ -49,11 +61,12 @@
             </header>
             <div class="card">
                 <div class="card-header d-flex ">
-                    <h2>Fan Information
-                        <select id="pick-fan" name="fans"> <!-- Fans will be populated here -->
-                            <option value="" disabled selected>Select a fan</option>
-                        </select>
-                    </h2>
+                    <h2>Fan Information</h2>
+                    <select id="pick-fan" name="fans"> <!-- Fans will be populated here -->
+                        <option value="" disabled selected>Select a fan</option>
+                    </select>
+                    <button type="button" class="ms-4 btn btn-info" data-bs-toggle="modal"
+                        data-bs-target="#favoriteModal">Favorite</button>
                 </div>
                 <div class="card-body mb-5">
                     <div class="row">
@@ -95,6 +108,48 @@
                 </div>
             </div>
         </div>
+        <!-- favorite modal -->
+        <div class="modal fade" id="favoriteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Favorite Player & Club</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-fan-form">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="favename" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="text" class="form-control" id="faveage">
+                            </div>
+                            <div class="mb-3">
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <input type="text" class="form-control" id="favenationality">
+                            </div>
+                            <div class="mb-3" hidden>
+                                <label for="membership" class="form-label">Membership</label>
+                                <input type="text" class="form-control" id="favemembership">
+                            </div>
+                            <div class="mb-3">
+                                <label for="player" class="form-label">Player</label>
+                                <select class="form-label w-100" name="player" id="faveplayer"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="club" class="form-label">Club</label>
+                                <select class="form-label w-100" name="club" id="faveclub"></select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <footer class="footer bg-light text-muted p-3 text-center">
         SoccerMS &copy; 2024 - All Rights Reserved
@@ -104,6 +159,7 @@
 
 
     <script>
+
         // Fetch all the fans
         const getFans = async () => {
             try {
@@ -136,6 +192,64 @@
         let fan_palyer_id = '';
 
         document.addEventListener('DOMContentLoaded', async () => {
+            function fetchPlayers() {
+                fetch('/api/players')
+                    .then(response => response.json())
+                    .then(data => {
+                        const favePlayer = document.getElementById('faveplayer');
+                        console.log(favePlayer);
+
+                        favePlayer.innerHTML = '';
+
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.textContent = 'Select a Player';
+                        defaultOption.disabled = true;
+                        defaultOption.selected = true;
+                        favePlayer.appendChild(defaultOption);
+
+                        data.forEach(player => {
+                            // transfer player select dropdown
+                            const fave = document.createElement('option');
+                            fave.value = player.player_id;
+                            fave.textContent = player.name;
+                            favePlayer.appendChild(fave);
+                        });
+                    })
+                    .catch(err => console.error(err));
+            }
+
+
+            function fetchClubs() {
+                fetch('/api/clubs')
+                    .then(response => response.json())
+                    .then(data => {
+                        const faveClub = document.getElementById('faveclub');
+                        console.log(faveClub);
+
+                        faveClub.innerHTML = '';
+
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.textContent = 'Select a Club';
+                        defaultOption.disabled = true;
+                        defaultOption.selected = true;
+                        faveClub.appendChild(defaultOption);
+
+                        data.forEach(club => {
+                            // transfer club select dropdown
+                            const fave = document.createElement('option');
+                            fave.value = club.club_id;
+                            fave.textContent = club.name;
+                            faveClub.appendChild(fave);
+                        });
+                    })
+                    .catch(err => console.error(err));
+            }
+
+            fetchClubs();
+            fetchPlayers();
+
             // Fetch all the fans and populate the dropdown
             try {
                 const fans = await getFans();
@@ -203,7 +317,48 @@
             }
 
         });
+
+        const addFanForm = document.getElementById('add-fan-form');
+        addFanForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fanData = {
+                name: document.getElementById('favename').value,
+                age: parseInt(document.getElementById('faveage').value, 10) || 18,
+                nationality: document.getElementById('favenationality').value || 'Brazilian',
+                membership_status: document.getElementById('favemembership').value || 'active',
+                player_id: parseInt(document.getElementById('faveplayer').value, 10),
+                club_id: parseInt(document.getElementById('faveclub').value, 10)
+
+            }
+
+            const response = await fetch('/api/fans/addFan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(fanData)
+            });
+
+            if (response.ok) {
+                alert('Fan added successfully');
+                addFanForm.reset();
+
+                fetchClubs();
+                fetchPlayers();
+                getFans();
+                fanClubPlayer();
+
+            } else {
+                console.log(response)
+
+            }
+        });
+
+
+
     </script>
+
 </body>
 
 </html>
