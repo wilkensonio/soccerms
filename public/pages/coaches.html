@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coaches</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="../style.css">
+        <!-- Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet">
+    </head>
+
+<body>
+    <header class="bg-light p-3 text-left">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="site">SoccerNetZone</div>
+        </div>
+    </header>
+    <main class="container-fluid row mt-3" style="min-height: 100vh;">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+            <ul class="list-group nav">
+                <li class="nav-item"><a class="nav-link" href="../index.html">
+                        <i class="bi bi-people me-2"></i>Players</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/clubs.html">
+                        <i class="bi bi-building me-2"></i>Clubs</a></li>
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/matches.html">
+                        <i class="bi bi-calendar-event me-2"></i>Matches</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/pages/competition.html">
+                        <i class="bi bi-trophy me-2"></i>Competitions</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/pages/favorites.html">
+                        <i class="bi bi-star me-2"></i>Favorites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/coaches.html">
+                        <i class="bi bi-star me-2"></i>Coaches
+                    </a>
+                </li>
+                
+                <li class="nav-item"><a class="nav-link text-danger" href="/pages/logout.html" id="logout-nav"><i
+                            class="fas fa-sign-out-alt"></i>
+                        <i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+        </nav>
+
+         <div class="col-9 main-background">
+            <div class="card mb-5">
+                <div class="card-header d-flex ">
+                    <h2>Coaches Information
+                        <select id="pick-coach" name="coaches"> <!-- Coaches will be populated here -->
+                            <option value="" disabled selected>Select a coach</option>
+                        </select>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3">
+                            <img src="/assets/club.png" class="img-fluid" alt="Club Image">
+                        </div>
+                        <div class="col-9">
+                            <p>Name<span class="name"></span></p>
+                            <p>Title<span class="titlecoach"></span></p>
+
+                            <p>Age <span class="age"></span></p>
+                            <p>Nationality <span class="nationality"></span></p>
+                            <p>Experience Years<span class="experience"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5>Club</h5>
+
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group" id="club-name">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Residence</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group" id="club-country"> </ul>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5>Stadium</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group" id="club-stadium"> </ul>
+                        </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer bg-light text-muted p-3 text-center">
+        © 2024 - AppStack
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script>
+        // Fetch all the coaches
+        const getCoaches = async () => {
+            try {
+                const response = await fetch('/api/coaches');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching coaches:', error);
+                return [];
+            }
+        };
+     
+        const coachClub = async () => {
+            try {
+                const response = await fetch('/api/coachclub');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching club:', error);
+                return [];
+            }
+        };
+       
+    
+        //call get coaches
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Fetch all the coaches and populate the dropdown
+            try {
+                const coaches = await getCoaches();
+              
+                const pickCoach = document.getElementById('pick-coach');
+
+                // Populate the select dropdown with coaches
+                coaches.forEach(coach => {
+            
+                    const option = document.createElement('option');
+                    option.value = coach.coach_id;
+                    option.textContent = coach.name;
+                    option.setAttribute('data-name', coach.name);
+                    option.setAttribute('data-title', coach.title);
+                    option.setAttribute('data-age', coach.age);
+                    option.setAttribute('data-nationality', coach.nationality);
+                    option.setAttribute('data-experience', coach.experience_years);
+                    option.setAttribute('data-coach_id', coach.coach_id);
+                    option.setAttribute('data-club_id', coach.club_id);
+                    pickCoach.appendChild(option);
+                });
+
+                pickCoach.addEventListener('change', async (e) => {
+                    const coach = e.target.selectedOptions[0];
+                
+                    //set the variables to the web fields
+                    const name = document.querySelector('.name');
+                  
+                    const title = document.querySelector('.titlecoach');
+                    const age = document.querySelector('.age');
+                    const nationality = document.querySelector('.nationality');
+                    const experience = document.querySelector('.experience');
+                    name.textContent= ` : ${coach.dataset.name}`; 
+                    title.textContent = ` : ${coach.dataset.title}`;
+                    age.textContent = ` : ${coach.dataset.age}`;
+                    nationality.textContent = ` : ${coach.dataset.nationality}`;
+                    experience.textContent = ` : ${coach.dataset.experience}`;
+
+                    //list the club the coach works for
+                    const coachclub = await coachClub();
+                    const clubName = document.getElementById('club-name');
+                    const clubCountry = document.getElementById('club-country');
+                    const clubStadium = document.getElementById('club-stadium');
+
+                    clubName.innerHTML = '';
+                    clubCountry.innerHTML = '';
+                    clubStadium.innerHTML = '';
+
+                    // this is after the join tables
+                    coachclub.forEach(coachclub => {
+
+                        const clubIdToInt = parseInt(coach.dataset.club_id);   
+                        
+                        if (coachclub.club_id === clubIdToInt) {
+                           
+                            const span = document.createElement('span');
+                            span.textContent = coachclub.name;
+                            clubName.appendChild(span);
+                             
+                        }
+
+                        if (coachclub.club_id === clubIdToInt) {
+                            
+                            const span = document.createElement('span');
+                            span.textContent = coachclub.country;
+                            clubCountry.appendChild(span);
+                        }
+
+                        
+                        if (coachclub.club_id === clubIdToInt) {
+                            
+                            const span = document.createElement('span');
+                            span.textContent = coachclub.stadium_name;
+                            clubStadium.appendChild(span);  
+                            
+                        }
+                     
+                    }); //end of join
+
+                });
+            } catch (error) {
+                //console.error('Error initializing club:', error);
+            }
+
+        });
+    </script>
+</body>
+
+</html>
