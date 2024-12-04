@@ -14,14 +14,16 @@
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
 </head>
+
 <body>
     <!-- Using Div is better this html also uses css  -->
-     <!-- New Sidebar update  -->
+    <!-- New Sidebar update  -->
     <!-- All contained in a div -->
-    <div class=" row">
+    <div class="row" style="height: 100vh;">
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block sidebar">
             <div class="position-sticky pt-4">
@@ -32,11 +34,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/clubs.html">
+                        <a class="nav-link" href="/pages/clubs.html" hidden>
                             <i class="bi bi-building me-2"></i>Clubs
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" hidden>
                         <a class="nav-link active" href="/pages/matches.html">
                             <i class="bi bi-calendar-event me-2"></i>Matches
                         </a>
@@ -56,8 +58,8 @@
                             <i class="bi bi-star me-2"></i>Coaches
                         </a>
                     </li>
-                    
-                    <li class="nav-item">
+
+                    <li class="nav-item" hidden>
                         <a class="nav-link text-danger" href="/pages/logout.html">
                             <i class="bi bi-box-arrow-right me-2"></i>Logout
                         </a>
@@ -65,8 +67,8 @@
                 </ul>
             </div>
         </nav>
-         <!-- Main Body -->
-         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-background">
+        <!-- Main Body -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-background">
             <div class="container-fluid ">
                 <div class="row">
                     <div class="container mt-5 ">
@@ -78,7 +80,8 @@
                     <div class="input-group mb-3">
                         <input type="text" id="search-match" class="form-control" placeholder="Search for matches...">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" id="search-button-match"><i class="bi bi-search"></i></button>
+                            <button class="btn btn-outline-secondary" id="search-button-match"><i
+                                    class="bi bi-search"></i></button>
                         </div>
                     </div>
                     <!--    Picture Div -->
@@ -146,15 +149,15 @@
         //  Fetching matches 
 
         function fetchMatches(searchTerm = '') {
-    fetch(`/api/matches/details?location=${searchTerm}`)
-        .then(response => response.json())
-        .then(data => {
-            const matchesTableBody = document.getElementById('matches-table-body');
-            matchesTableBody.innerHTML = '';
-            if (data.length > 0) {
-                data.forEach(match => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+            fetch(`/api/matches/details?location=${searchTerm}`)
+                .then(response => response.json())
+                .then(data => {
+                    const matchesTableBody = document.getElementById('matches-table-body');
+                    matchesTableBody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(match => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
                         <td>${new Date(match.date).toLocaleDateString()}</td>
                         <td class="text-end">${match.game_time}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.location}</td>
@@ -163,18 +166,18 @@
                         <td class="d-none d-xl-table-cell text-end">${match.score}</td>
                         <td class="d-none d-xl-table-cell text-end">${match.competition_name}</td>
                     `;
-                    matchesTableBody.appendChild(row);
+                            matchesTableBody.appendChild(row);
+                        });
+                    } else {
+                        const noMatchRow = document.createElement('tr');
+                        noMatchRow.innerHTML = `<td colspan="7" class="text-center">No matches found.</td>`;
+                        matchesTableBody.appendChild(noMatchRow);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching matches:', error);
                 });
-            } else {
-                const noMatchRow = document.createElement('tr');
-                noMatchRow.innerHTML = `<td colspan="7" class="text-center">No matches found.</td>`;
-                matchesTableBody.appendChild(noMatchRow);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching matches:', error);
-        });
-}
+        }
     </script>
 </body>
 
