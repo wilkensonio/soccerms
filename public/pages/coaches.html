@@ -8,16 +8,18 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="../style.css">
-        <!-- Font -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
-            rel="stylesheet">
-    </head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
 
 <body>
-    <header class="bg-light p-3 text-left">
+    <header class="bg-light p-3 text-left" hidden>
         <div class="d-flex justify-content-between align-items-center">
             <div class="site">SoccerNetZone</div>
         </div>
@@ -27,7 +29,7 @@
             <ul class="list-group nav">
                 <li class="nav-item"><a class="nav-link" href="../index.html">
                         <i class="bi bi-people me-2"></i>Players</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pages/clubs.html">
+                <li class="nav-item"><a class="nav-link" href="/pages/clubs.html" hidden>
                         <i class="bi bi-building me-2"></i>Clubs</a></li>
                 </a></li>
                 <li class="nav-item"><a class="nav-link" href="/pages/matches.html">
@@ -40,18 +42,21 @@
                         <i class="bi bi-star me-2"></i>Favorites</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/pages/coaches.html">
+                    <a class="nav-link" href="/pages/coaches.html" hidden>
                         <i class="bi bi-star me-2"></i>Coaches
                     </a>
                 </li>
-                
-                <li class="nav-item"><a class="nav-link text-danger" href="/pages/logout.html" id="logout-nav"><i
+
+                <li class="nav-item"><a class="nav-link text-danger" href="/pages/logout.html" id="logout-nav" hidden><i
                             class="fas fa-sign-out-alt"></i>
                         <i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
             </ul>
         </nav>
 
-         <div class="col-9 main-background">
+        <div class="col-9 main-background">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="title">SoccerMS</h1>
+            </div>
             <div class="card mb-5">
                 <div class="card-header d-flex ">
                     <h2>Coaches Information
@@ -98,9 +103,9 @@
                         <div class="card-body">
                             <ul class="list-group" id="club-country"> </ul>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
                 <div class="col">
                     <div class="card mb-3">
@@ -110,8 +115,8 @@
                         <div class="card-body">
                             <ul class="list-group" id="club-stadium"> </ul>
                         </div>
-            </div>
-        </div>
+                    </div>
+                </div>
     </main>
     <footer class="footer bg-light text-muted p-3 text-center">
         © 2024 - AppStack
@@ -135,7 +140,7 @@
                 return [];
             }
         };
-     
+
         const coachClub = async () => {
             try {
                 const response = await fetch('/api/coachclub');
@@ -149,19 +154,19 @@
                 return [];
             }
         };
-       
-    
+
+
         //call get coaches
         document.addEventListener('DOMContentLoaded', async () => {
             // Fetch all the coaches and populate the dropdown
             try {
                 const coaches = await getCoaches();
-              
+
                 const pickCoach = document.getElementById('pick-coach');
 
                 // Populate the select dropdown with coaches
                 coaches.forEach(coach => {
-            
+
                     const option = document.createElement('option');
                     option.value = coach.coach_id;
                     option.textContent = coach.name;
@@ -177,15 +182,15 @@
 
                 pickCoach.addEventListener('change', async (e) => {
                     const coach = e.target.selectedOptions[0];
-                
+
                     //set the variables to the web fields
                     const name = document.querySelector('.name');
-                  
+
                     const title = document.querySelector('.titlecoach');
                     const age = document.querySelector('.age');
                     const nationality = document.querySelector('.nationality');
                     const experience = document.querySelector('.experience');
-                    name.textContent= ` : ${coach.dataset.name}`; 
+                    name.textContent = ` : ${coach.dataset.name}`;
                     title.textContent = ` : ${coach.dataset.title}`;
                     age.textContent = ` : ${coach.dataset.age}`;
                     nationality.textContent = ` : ${coach.dataset.nationality}`;
@@ -204,32 +209,32 @@
                     // this is after the join tables
                     coachclub.forEach(coachclub => {
 
-                        const clubIdToInt = parseInt(coach.dataset.club_id);   
-                        
+                        const clubIdToInt = parseInt(coach.dataset.club_id);
+
                         if (coachclub.club_id === clubIdToInt) {
-                           
+
                             const span = document.createElement('span');
                             span.textContent = coachclub.name;
                             clubName.appendChild(span);
-                             
+
                         }
 
                         if (coachclub.club_id === clubIdToInt) {
-                            
+
                             const span = document.createElement('span');
                             span.textContent = coachclub.country;
                             clubCountry.appendChild(span);
                         }
 
-                        
+
                         if (coachclub.club_id === clubIdToInt) {
-                            
+
                             const span = document.createElement('span');
                             span.textContent = coachclub.stadium_name;
-                            clubStadium.appendChild(span);  
-                            
+                            clubStadium.appendChild(span);
+
                         }
-                     
+
                     }); //end of join
 
                 });
